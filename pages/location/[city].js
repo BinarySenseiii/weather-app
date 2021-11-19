@@ -2,6 +2,8 @@ import React from 'react'
 import Head from 'next/head'
 import cities from '../../data/city-list.json'
 
+import moment from 'moment-timezone'
+
 // components
 import {TodaysWeather} from '../../components'
 
@@ -29,12 +31,15 @@ export async function getServerSideProps(context) {
     }
   }
 
+  const hourlyWeather = getHourlyWeather(data.hourly, data.timezone)
+
   return {
     props: {
       city,
+      hourlyWeather,
+      timezone: data.timezone,
       currentWeather: data.current,
       dailyWeather: data.daily,
-      hourlyWeather: data.hourly,
     },
   }
 }
@@ -51,13 +56,23 @@ const getCity = slug => {
   return cities.find(city => city.id.toString() === id)
 }
 
+const getHourlyWeather = (hourlyData, timezone) => {
+  const endOfDay = moment().tz(timezone).endOf('day').valueOf()
+  const eodTimeStamp = Math.floor(endOfDay / 1000)
+
+  const todaysData = hourlyData.filter(data => data.dt < eodTimeStamp)
+
+  return todaysData
+}
+
 export default function City({
   city,
+  timezone,
   currentWeather,
   dailyWeather,
   hourlyWeather,
 }) {
-  console.log(hourlyWeather)
+  console.log(timezone)
   return (
     <div>
       <Head>
@@ -66,7 +81,11 @@ export default function City({
 
       <div className="page-wrapper">
         <div className="container">
-          <TodaysWeather city={city} weather={dailyWeather[0]} />
+          <TodaysWeather
+            city={city}
+            weather={dailyWeather[0]}
+            timeZone={timezone}
+          />
         </div>
       </div>
     </div>

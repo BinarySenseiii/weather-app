@@ -1,8 +1,8 @@
 import React from 'react'
 import Image from 'next/image'
-import moment from 'moment'
+import moment from 'moment-timezone'
 
-export default function TodaysWeather({city, weather}) {
+export default function TodaysWeather({city, weather, timeZone}) {
   return (
     <div className="today">
       <div className="today__inner">
@@ -18,12 +18,12 @@ export default function TodaysWeather({city, weather}) {
           <div className="today__sun-times">
             <div>
               <span>Sunrise</span>
-              <span>{moment.unix(weather.sunrise).format('LT')}</span>
+              <span>{moment.unix(weather.sunrise).tz(timeZone).format('LT')}</span>
             </div>
 
             <div>
               <span>Sunset</span>
-              <span>{moment.unix(weather.sunset).format('LT')}</span>
+              <span>{moment.unix(weather.sunset).tz(timeZone).format('LT')}</span>
             </div>
           </div>
         </div>
