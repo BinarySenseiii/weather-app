@@ -7,32 +7,31 @@ export default function SearchBox() {
   const [result, setResult] = React.useState([])
 
   const onChange = (e) => {
-    const { value } = e.target
+    const value = e.target.value.toLowerCase();
 
     setQuery(value)
 
-    const matchingCities = []
+    const matchingResults = []
 
     if (value.length > 3) {
       for (const city of cities) {
-        if (matchingCities.length >= 5) {
+        if (matchingResults.length >= 5) {
           break;
         }
 
-        const match = city.name.toLowerCase().startsWith(value.toLowerCase())
+        const matchResult = city.name.toLowerCase().startsWith(value)
 
-        if (match) {
+        if (matchResult) {
           const cityData = {
             ...city,
             slug: `${city.name.toLowerCase().replace(/ /g, "-")}-${city.id}`
           }
-          matchingCities.push(cityData)
+          matchingResults.push(cityData)
         }
       }
     }
 
-    return setResult(matchingCities)
-
+    return setResult(matchingResults)
   }
 
   return (
@@ -45,7 +44,7 @@ export default function SearchBox() {
             result.map(city => (
               <li key={city.id}>
                 <Link passhref href={`location/${city.slug}`}>
-                  <a> 
+                  <a>
                     {city.name}
                     {city.state ? `, ${city.state}` : ''}
                     <span>{city.country}</span>
@@ -53,7 +52,7 @@ export default function SearchBox() {
                 </Link>
               </li>
             ))
-          ): (
+          ) : (
             <li className="search__no-results">no results found</li>
           )}
         </ul>
