@@ -6,8 +6,8 @@ export default function SearchBox() {
   const [query, setQuery] = React.useState('')
   const [result, setResult] = React.useState([])
 
-  const onChange = (e) => {
-    const value = e.target.value.toLowerCase();
+  const onChange = e => {
+    const value = e.target.value.toLowerCase()
 
     setQuery(value)
 
@@ -16,7 +16,7 @@ export default function SearchBox() {
     if (value.length > 3) {
       for (const city of cities) {
         if (matchingResults.length >= 5) {
-          break;
+          break
         }
 
         const matchResult = city.name.toLowerCase().startsWith(value)
@@ -24,7 +24,7 @@ export default function SearchBox() {
         if (matchResult) {
           const cityData = {
             ...city,
-            slug: `${city.name.toLowerCase().replace(/ /g, "-")}-${city.id}`
+            slug: `${city.name.toLowerCase().replace(/ /g, '-')}-${city.id}`,
           }
           matchingResults.push(cityData)
         }
