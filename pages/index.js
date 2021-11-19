@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import {SearchBox} from '../components'
+import {SearchBox, FamousPlaces} from '../components'
 
 export default function Home() {
   return (
@@ -10,9 +10,8 @@ export default function Home() {
 
       <div className="home">
         <div className="container">
-          {/* Search Functionality  */}
           <SearchBox />
-          {/*  */}
+          <FamousPlaces />
         </div>
       </div>
     </div>

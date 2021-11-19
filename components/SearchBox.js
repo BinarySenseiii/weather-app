@@ -1,10 +1,20 @@
 import React from 'react'
 import cities from '../data/city-list.json'
 import Link from 'next/link'
+import Router from 'next/router'
 
-export default function SearchBox() {
+export default function SearchBox({placeholder}) {
   const [query, setQuery] = React.useState('')
   const [result, setResult] = React.useState([])
+
+  React.useEffect(() => {
+    const clearQuery = () => setQuery('')
+    Router.events.on('routChangeComplete', clearQuery)
+
+    return () => {
+      Router.events.off('routChangeComplete', clearQuery)
+    }
+  }, [])
 
   const onChange = e => {
     const value = e.target.value.toLowerCase()
@@ -36,14 +46,19 @@ export default function SearchBox() {
 
   return (
     <div className="search">
-      <input type="text" value={query} onChange={onChange} />
+      <input
+        type="text"
+        value={query}
+        onChange={onChange}
+        placeholder={placeholder ? placeholder : ''}
+      />
 
       {query.length > 3 && (
         <ul>
           {result.length > 0 ? (
             result.map(city => (
               <li key={city.id}>
-                <Link passhref href={`location/${city.slug}`}>
+                <Link passhref href={`/location/${city.slug}`}>
                   <a>
                     {city.name}
                     {city.state ? `, ${city.state}` : ''}
